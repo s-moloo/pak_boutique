@@ -15,6 +15,7 @@
           <tr>
             <th>Item</th>
             <th>Category</th>
+            <th>Size</th>
             <th>Price</th>
             <th>Qty</th>
             <th>Subtotal</th>
@@ -26,6 +27,7 @@
           <tr class="hover">
             <td class="font-semibold">{{ cart_item.item.description }}</td>
             <td><div class="badge badge-outline badge-sm">{{ cart_item.item.get_category_display }}</div></td>
+            <td>{{ cart_item.item.size }}</td>
             <td>${{ cart_item.item.price|floatformat:2 }}</td>
             
             <td>

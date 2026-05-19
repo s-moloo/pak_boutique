@@ -16,14 +16,6 @@ class Command(BaseCommand):
 
         # ── Women's Collection ────────────────────────────────────────────────
         Women.objects.create(
-            description='Embroidered Georgette Saree',
-            color='Crimson Red',
-            size="Large",
-            price=120.50,
-            category='sarees',
-            image='images\red_saree.jpg' # Placeholder image path
-        )
-        Women.objects.create(
             description='Bridal Silk Lehenga Choli',
             color='Maroon',
             size="Medium",
@@ -38,6 +30,14 @@ class Command(BaseCommand):
             price=65.00,
             category='shalwarkameez',
             image='images\yellow_kameez.jpg'
+        )
+        Women.objects.create(
+            description='Banarasi Silk Saree',
+            color='Emerald Green',
+            size="One Size",
+            price=120.00,
+            category='sarees',
+            image='images\green_saree.jpg'
         )
 
         # ── Men's Collection ──────────────────────────────────────────────────
