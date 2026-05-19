@@ -1,0 +1,74 @@
+{% if accessories %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  
+  {% for item in accessories %}
+  
+  <div id="accessory-{{ item.pk }}" class="card bg-base-100 shadow-xl hover:-translate-y-1 transition-transform duration-300">
+    
+    <!-- Image Wrapper with Relative positioning for the Heart -->
+    <figure class="px-4 pt-4 aspect-[3/4] relative">
+        
+      <!-- THE HEART BUTTON (Favorites) -->
+      <!-- Positioned absolute to float over the top right of the image -->
+      <div class="absolute top-6 right-6 z-10">
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'toggle_favorite' 'accessory' item.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-circle btn-sm bg-base-100/80 hover:bg-error hover:text-white border-none shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
+        </form>
+    {% else %}
+        <button type="button" onclick="auth_modal.showModal()" class="btn btn-circle btn-sm bg-base-100/80 hover:bg-error hover:text-white border-none shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        </button>
+    {% endif %}
+</div>
+
+      <!-- The Product Image -->
+      <a href="{% url 'accessory_detail' item.pk %}" class="w-full h-full block">
+        {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+        {% else %}
+            <div class="bg-base-200 h-full w-full rounded-xl flex items-center justify-center text-base-content/50">No Image</div>
+        {% endif %}
+      </a>
+    </figure>
+
+    <!-- Card Body -->
+    <div class="card-body items-center text-center p-4">
+      <h2 class="card-title text-lg">
+        <a href="{% url 'accessory_detail' item.pk %}" class="hover:text-primary transition-colors">
+          {{ item.description|truncatechars:25 }}
+        </a>
+      </h2>
+      <p class="text-sm text-base-content/70 capitalize">{{ item.get_category_display }} | Size: {{ item.size }}</p>
+      <p class="font-bold text-lg mt-2">${{ item.price|floatformat:2 }}</p>
+      
+      <!-- ADD TO CART BUTTON -->
+      <div class="card-actions mt-4 w-full">
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'add_to_cart' 'accessory' item.pk %}" class="w-full">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+         </form>
+        {% else %}
+            <!-- If NOT logged in, trigger the DaisyUI Auth Modal -->
+            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block">Add to Cart</button>
+        {% endif %}
+      </div>
+      
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+{% else %}
+<div class="alert alert-info mt-4 shadow-sm">
+  <span>No accessory's items found matching your search.</span>
+</div>
+{% endif %}

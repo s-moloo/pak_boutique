@@ -1,0 +1,20 @@
+{% extends 'boutique\base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold font-serif text-primary">Kids' Collection</h1>
+        
+        {% if user.is_staff %}
+            <a href="{% url 'kids_create' %}" class="btn btn-primary">Add New Item</a>
+        {% endif %}
+    </div>
+    <div class="mb-6">
+        <input type="text" name="q" placeholder="Search description, color, or category..."
+               hx-get="{% url 'kids_list' %}" hx-target="#grid-container" hx-select="#grid-container" hx-trigger="keyup changed delay:500ms"
+               class="input input-bordered w-full max-w-md" />
+    </div>
+    <div id="grid-container">
+        {% include 'boutique/partials/kids_table.html' %}
+    </div>
+</div>
+{% endblock %}

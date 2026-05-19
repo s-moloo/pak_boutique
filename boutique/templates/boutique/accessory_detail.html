@@ -1,0 +1,50 @@
+{% extends 'boutique/base.html' %}
+{% block title %}{{ accessory.description }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumbs text-sm mb-6">
+  <ul>
+    <li><a href="{% url 'landing' %}">Home</a></li>
+    <li><a href="{% url 'accessory_list' %}">Accessories</a></li>
+    <li class="text-base-content/70">{{ accessory.description|truncatechars:30 }}</li>
+  </ul>
+</div>
+
+<div class="card lg:card-side bg-base-200 shadow-xl max-w-5xl mx-auto">
+  <figure class="lg:w-1/2 aspect-[3/4] lg:aspect-auto bg-base-100">
+    {% if accessory.image %}
+      <img src="{{ accessory.image.url }}" alt="{{ accessory.description }}" class="object-cover w-full h-full" />
+    {% else %}
+      <div class="w-full h-96 flex items-center justify-center text-base-content/50 font-semibold">No Image Available</div>
+    {% endif %}
+  </figure>
+  
+  <div class="card-body lg:w-1/2 justify-center p-8">
+    <div class="badge badge-primary mb-2">{{ accessory.get_category_display }}</div>
+    <h1 class="card-title text-4xl font-serif leading-tight mb-2">{{ accessory.description }}</h1>
+    <p class="text-3xl text-success font-bold mb-6">${{ accessory.price|floatformat:2 }}</p>
+    
+    <div class="flex flex-col gap-4 mb-6 text-lg">
+      <div class="flex items-center gap-3">
+        <span class="font-semibold text-base-content/70 w-16">Color:</span>
+        <span class="badge badge-ghost badge-lg">{{ accessory.color }}</span>
+      </div>
+      <!-- Included size, but noting that Accessories usually have size '0' or 'N/A' based on your models -->
+      <div class="flex items-center gap-3">
+        <span class="font-semibold text-base-content/70 w-16">Size:</span>
+        <span class="badge badge-outline badge-lg">{% if accessory.size == 0 %}One Size{% else %}{{ accessory.size }}{% endif %}</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card-actions justify-end mt-4">
+      <a href="{% url 'accessory_list' %}" class="btn btn-ghost">Back to List</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accessory_update' accessory.pk %}" class="btn btn-warning">Edit Item</a>
+        <a href="{% url 'accessory_delete' accessory.pk %}" class="btn btn-error">Delete</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

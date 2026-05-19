@@ -1,0 +1,49 @@
+{% extends 'boutique/base.html' %}
+{% block title %}{{ man.description }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumbs text-sm mb-6">
+  <ul>
+    <li><a href="{% url 'landing' %}">Home</a></li>
+    <li><a href="{% url 'men_list' %}">Men</a></li>
+    <li class="text-base-content/70">{{ man.description|truncatechars:30 }}</li>
+  </ul>
+</div>
+
+<div class="card lg:card-side bg-base-200 shadow-xl max-w-5xl mx-auto">
+  <figure class="lg:w-1/2 aspect-[3/4] lg:aspect-auto bg-base-100">
+    {% if man.image %}
+      <img src="{{ man.image.url }}" alt="{{ man.description }}" class="object-cover w-full h-full" />
+    {% else %}
+      <div class="w-full h-96 flex items-center justify-center text-base-content/50 font-semibold">No Image Available</div>
+    {% endif %}
+  </figure>
+  
+  <div class="card-body lg:w-1/2 justify-center p-8">
+    <div class="badge badge-primary mb-2">{{ man.get_category_display }}</div>
+    <h1 class="card-title text-4xl font-serif leading-tight mb-2">{{ man.description }}</h1>
+    <p class="text-3xl text-success font-bold mb-6">${{ man.price|floatformat:2 }}</p>
+    
+    <div class="flex flex-col gap-4 mb-6 text-lg">
+      <div class="flex items-center gap-3">
+        <span class="font-semibold text-base-content/70 w-16">Color:</span>
+        <span class="badge badge-ghost badge-lg">{{ man.color }}</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="font-semibold text-base-content/70 w-16">Size:</span>
+        <span class="badge badge-outline badge-lg">{{ man.size }}</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card-actions justify-end mt-4">
+      <a href="{% url 'men_list' %}" class="btn btn-ghost">Back to List</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'men_update' man.pk %}" class="btn btn-warning">Edit Item</a>
+        <a href="{% url 'men_delete' man.pk %}" class="btn btn-error">Delete</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'boutique/base.html' %}
+{% block title %}Manage All Carts{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8">
+  <h1 class="text-3xl font-bold font-serif text-primary mb-6">Customer Carts (Admin View)</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {% for cart in carts %}
+      <div class="card bg-base-200 shadow">
+        <div class="card-body p-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="card-title text-lg">Cart #{{ cart.id }}</h3>
+            <span class="badge badge-primary">Owner: {{ cart.user.username }}</span>
+          </div>
+
+          <table class="table table-xs">
+            <thead>
+              <tr><th>Item</th><th>Qty</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody>
+              {% for cart_item in cart.items.all %}
+              <tr>
+                <td>{{ cart_item.item.description|truncatechars:20 }}</td>
+                <td>{{ cart_item.quantity }}</td>
+                <td>${{ cart_item.subtotal|floatformat:2 }}</td>
+              </tr>
+              {% empty %}
+                <tr><td colspan="3" class="text-center italic text-base-content/50">Empty Cart</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="text-right font-bold mt-2">Total: ${{ cart.total|floatformat:2 }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

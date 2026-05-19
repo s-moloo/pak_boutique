@@ -1,0 +1,68 @@
+{% extends 'boutique/base.html' %}
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold font-serif text-primary">My Shopping Cart</h1>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl" id="my-cart-{{ cart.id }}">
+    <div class="card-body p-6">
+      
+      <table class="table w-full">
+        <thead class="bg-base-300 text-base-content text-sm">
+          <tr>
+            <th>Item</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cart_item in cart_items %}
+          <tr class="hover">
+            <td class="font-semibold">{{ cart_item.item.description }}</td>
+            <td><div class="badge badge-outline badge-sm">{{ cart_item.item.get_category_display }}</div></td>
+            <td>${{ cart_item.item.price|floatformat:2 }}</td>
+            
+            <td>
+              <form method="post" action="{% url 'update_cart_item' cart_item.id %}" class="flex gap-1 items-center">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="input input-bordered input-xs w-16 text-center" />
+                <button type="submit" class="btn btn-xs btn-success text-white tooltip" data-tip="Update Quantity">✓</button>
+              </form>
+            </td>
+
+            <td class="font-bold text-success">${{ cart_item.subtotal|floatformat:2 }}</td>
+            
+            <td>
+              <form method="post" action="{% url 'remove_cart_item' cart_item.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-xs btn-circle btn-ghost text-error tooltip" data-tip="Remove Item">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+            <tr><td colspan="6" class="text-center text-base-content/50 py-8 italic">Your cart is empty. Time to shop!</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="divider my-2"></div>
+      
+      <div class="flex justify-between items-center mt-4">
+        <a href="{% url 'landing' %}" class="btn btn-outline">Continue Shopping</a>
+        <div class="text-right">
+          <p class="text-sm text-base-content/70 mb-1">Estimated Total</p>
+          <p class="text-3xl font-bold text-primary">${{ cart.total|floatformat:2 }}</p>
+          <button class="btn btn-primary mt-4 w-full" {% if not cart_items %}disabled{% endif %}>Checkout Securely</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

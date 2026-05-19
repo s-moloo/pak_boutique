@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Pak Boutique{% endblock %} — Indian Ethnic Wear</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-base-100"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+  <!-- ═══════════════════════════════ NAVBAR ══════════════════════════════ -->
+<div class="navbar bg-base-200 shadow-md px-4 sticky top-0 z-50">
+
+  <div class="navbar-start">
+    <a href="{% url 'landing' %}" class="btn btn-ghost text-xl font-bold font-serif tracking-wide text-primary">
+      ✨ Pak Boutique
+    </a>
+  </div>
+
+  <div class="navbar-center hidden lg:flex gap-2">
+    <a href="{% url 'women_list' %}" class="btn btn-ghost btn-sm">Women</a>
+    <a href="{% url 'men_list' %}" class="btn btn-ghost btn-sm">Men</a>
+    <a href="{% url 'kids_list' %}" class="btn btn-ghost btn-sm">Kids</a>
+    <a href="{% url 'accessory_list' %}" class="btn btn-ghost btn-sm">Accessories</a>
+  </div>
+
+  <div class="navbar-end gap-2">
+    
+    <div class="dropdown dropdown-end lg:hidden">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </label>
+      <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 rounded-box z-50 mt-3 w-52 p-2 shadow">
+        <li><a href="{% url 'women_list' %}">Women</a></li>
+        <li><a href="{% url 'men_list' %}">Men</a></li>
+        <li><a href="{% url 'kids_list' %}">Kids</a></li>
+        <li><a href="{% url 'accessory_list' %}">Accessories</a></li>
+      </ul>
+    </div>
+
+    {% if user.is_authenticated %}
+      
+      {% if user.is_staff %}
+        <a href="{% url 'admin_carts' %}" class="btn btn-ghost btn-sm text-warning hidden sm:inline-flex">All Carts</a>
+      {% endif %}
+
+      <a href="{% url 'favorites_list' %}" class="btn btn-ghost btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+      </a>
+
+      <a href="{% url 'customer_cart' %}" class="btn btn-ghost btn-circle">
+        <div class="indicator">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          <span class="badge badge-sm badge-primary indicator-item">!</span>
+        </div>
+      </a>
+
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost btn-circle avatar placeholder">
+          <div class="bg-primary text-primary-content rounded-full w-9">
+            <span class="text-sm font-bold">
+              {{ user.username|first|upper }}
+            </span>
+          </div>
+        </label>
+        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-200 rounded-box z-50 mt-3 w-48 p-2 shadow">
+          <li class="menu-title px-4 py-2 text-xs opacity-60">
+            {{ user.username }}
+          </li>
+          <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="w-full text-left text-error">
+                Logout
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+
+    {% else %}
+      <button onclick="auth_modal.showModal()" class="btn btn-primary btn-sm">
+        Login / Register
+      </button>
+    {% endif %}
+    
+  </div>
+</div>```
+
+  <!-- ═══════════════════════════ MAIN CONTENT ════════════════════════════ -->
+  <main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ══════════════════════════════ FOOTER ═══════════════════════════════ -->
+  <footer class="footer footer-center bg-base-300 text-base-content p-6 mt-auto">
+    <aside>
+      <p class="font-bold text-lg font-serif">✨ Pak Boutique</p>
+      <p class="text-sm opacity-70">
+        Authentic Indian Ethnic Wear — Sarees, Lehengas, Kurtas & More
+      </p>
+      <p class="text-xs opacity-50 mt-2">
+        &copy; {% now "Y" %} Pak Boutique. Calgary, AB.
+      </p>
+    </aside>
+  </footer>
+
+  <!-- ══════════════════════════ TOAST CONTAINER ══════════════════════════ -->
+  <div id="toast-container" class="toast toast-end toast-bottom z-50"
+       hx-on:mouseenter="setTimeout(() => {
+           this.querySelectorAll('.alert').forEach(el => {
+               el.style.transition = 'opacity 0.5s ease';
+               el.style.opacity = '0';
+               setTimeout(() => el.remove(), 500);
+           });
+       }, 3000)">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }} shadow-lg">
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- ════════════════════════════ AUTH MODAL ═════════════════════════════ -->
+  {% include 'boutique/auth/modal.html' %}
+
+</body>
+</html>
