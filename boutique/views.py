@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404, redirect 
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 )
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
@@ -18,16 +18,16 @@ from django.views.generic import ListView
 
 # ── Public ─────────────────────────────────────────────────────────────────
 
-class LandingView(ListView):
-    model = Women
+class LandingView(TemplateView):
     template_name = 'boutique/landing.html'
-    context_object_name = 'women'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['men'] = Men.objects.all()
-        context['kids'] = Kids.objects.all()
-        context['accessory'] = Accessory.objects.all()
+        # Changed [:4] to [:3] so it perfectly fills exactly one 3-column row!
+        context['women'] = Women.objects.all().order_by('-id')[:3]
+        context['men'] = Men.objects.all().order_by('-id')[:3]
+        context['kids'] = Kids.objects.all().order_by('-id')[:3]
+        context['accessories'] = Accessory.objects.all().order_by('-id')[:3]
         return context
     
 # ── Auth ───────────────────────────────────────────────────────────────────
@@ -73,19 +73,19 @@ class WomenDetailView(DetailView):
     template_name = 'boutique/women_detail.html'
     context_object_name = 'woman' 
 
-class WomenCreateView(LoginRequiredMixin, CreateView):
+class WomenCreateView(AdminRequiredMixin, CreateView):
     model = Women
     form_class = WomenForm
     template_name = 'boutique/women_form.html'
     success_url = reverse_lazy('women_list')
 
-class WomenUpdateView(LoginRequiredMixin, UpdateView):
+class WomenUpdateView(AdminRequiredMixin, UpdateView):
     model = Women
     form_class = WomenForm
     template_name = 'boutique/women_form.html'
     success_url = reverse_lazy('women_list')
 
-class WomenDeleteView(LoginRequiredMixin, DeleteView):
+class WomenDeleteView(AdminRequiredMixin, DeleteView):
     model = Women
     template_name = 'boutique/women_confirm_delete.html'
     success_url = reverse_lazy('women_list') 
@@ -134,22 +134,22 @@ class MenDetailView(DetailView):
     template_name = 'boutique/men_detail.html'
     context_object_name = 'man'
 
-class MenCreateView(LoginRequiredMixin, CreateView):
+class MenCreateView(AdminRequiredMixin, CreateView):
     model = Men
     form_class = MenForm
     template_name = 'boutique/men_form.html'
-    success_url = reverse_lazy('men_list') 
+    success_url = reverse_lazy('men_list')
 
-class MenUpdateView(LoginRequiredMixin, UpdateView):
+class MenUpdateView(AdminRequiredMixin, UpdateView):
     model = Men
     form_class = MenForm
     template_name = 'boutique/men_form.html'
-    success_url = reverse_lazy('men_list') 
+    success_url = reverse_lazy('men_list')
 
-class MenDeleteView(LoginRequiredMixin, DeleteView):
+class MenDeleteView(AdminRequiredMixin, DeleteView):
     model = Men
     template_name = 'boutique/men_confirm_delete.html'
-    success_url = reverse_lazy('men_list') 
+    success_url = reverse_lazy('men_list')
 
 class MenSearchView(LoginRequiredMixin, ListView):
      model               = Men
@@ -194,22 +194,22 @@ class KidsDetailView(DetailView):
     template_name = 'boutique/kids_detail.html'
     context_object_name = 'kid' 
 
-class KidsCreateView(LoginRequiredMixin, CreateView):
+class KidsCreateView(AdminRequiredMixin, CreateView):
     model = Kids
     form_class = KidsForm
     template_name = 'boutique/kids_form.html'
-    success_url = reverse_lazy('kids_list')  
+    success_url = reverse_lazy('kids_list')
 
-class KidsUpdateView(LoginRequiredMixin, UpdateView):
+class KidsUpdateView(AdminRequiredMixin, UpdateView):
     model = Kids
     form_class = KidsForm
     template_name = 'boutique/kids_form.html'
-    success_url = reverse_lazy('kids_list')  
+    success_url = reverse_lazy('kids_list')
 
-class KidsDeleteView(LoginRequiredMixin, DeleteView):
+class KidsDeleteView(AdminRequiredMixin, DeleteView):
     model = Kids
     template_name = 'boutique/kids_confirm_delete.html'
-    success_url = reverse_lazy('kids_list') 
+    success_url = reverse_lazy('women_list') 
 
 class KidsSearchView(LoginRequiredMixin, ListView):
      model               = Kids
@@ -254,23 +254,22 @@ class AccessoryDetailView(DetailView):
     template_name = 'boutique/accessory_detail.html'
     context_object_name = 'accessory' 
 
-class AccessoryCreateView(LoginRequiredMixin, CreateView):
+class AccessoryCreateView(AdminRequiredMixin, CreateView):
     model = Accessory
     form_class = AccessoryForm
     template_name = 'boutique/accessory_form.html'
-    success_url = reverse_lazy('accessory_list') 
+    success_url = reverse_lazy('accessory_list')
 
-class AccessoryUpdateView(LoginRequiredMixin, UpdateView):
+class AccessoryUpdateView(AdminRequiredMixin, UpdateView):
     model = Accessory
     form_class = AccessoryForm
     template_name = 'boutique/accessory_form.html'
-    success_url = reverse_lazy('accessory_list') 
+    success_url = reverse_lazy('accessory_list')
 
-class AccessoryDeleteView(LoginRequiredMixin, DeleteView):
+class AccessoryDeleteView(AdminRequiredMixin, DeleteView):
     model = Accessory
     template_name = 'boutique/accessory_confirm_delete.html'
-    success_url = reverse_lazy('accessory_list') 
-
+    success_url = reverse_lazy('women_list')
 class AccessorySearchView(LoginRequiredMixin, ListView):
      model               = Accessory
      template_name       = 'boutique/partials/accessory_table.html'
@@ -294,17 +293,7 @@ class AccessoryInlineDeleteView(LoginRequiredMixin, DeleteView):
         return HttpResponse('')      # HTMX swaps this (empty) into the row
 
 # ── Cart Logic ─────────────────────────────────────────────────────────────
-class MyCartView(LoginRequiredMixin, ListView):
-    template_name = 'boutique/cart.html'
-    context_object_name = 'cart_items'
 
-    def get_queryset(self):
-        #1. Get or create a cart specifically for THIS logged-in user
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
-
-        #2. Return ONLY the items inside this specific user's cart
-        return cart.items.all()
-    
 class AddToCartView(LoginRequiredMixin, View):
     def post(self, request, category, item_id, *args, **kwargs):
         # 1. Get the current user's cart (or create one if it's their first time)
@@ -342,78 +331,6 @@ class AddToCartView(LoginRequiredMixin, View):
 
         # 5. Redirect the user right back to the page they clicked the button on!
         return redirect(request.META.get('HTTP_REFERER', 'landing'))
-    
-class ToggleFavoriteView(LoginRequiredMixin, View):
-    def post(self, request, category, item_id, *args, **kwargs):
-        # 1. Figure out which item they are trying to favorite
-        fav_kwargs = {'user': request.user}
-
-        if category == 'women':
-            fav_kwargs['woman_item_id'] = item_id
-        elif category == 'men':
-            fav_kwargs['man_item_id'] = item_id
-        elif category == 'kids':
-            fav_kwargs['kid_item_id'] = item_id
-        elif category == 'accessory':
-            fav_kwargs['accessory_item_id'] = item_id
-        else:
-            return HttpResponse("Invalid category", status=400)
-
-        # 2. Check if it's ALREADY in their favorites
-        existing_favorite = Favorite.objects.filter(**fav_kwargs).first()
-
-        if existing_favorite:
-            # If it exists, they are "un-favoriting" it
-            existing_favorite.delete()
-            messages.info(request, "Removed from your favorites.")
-        else:
-            # If it doesn't exist, create it!
-            Favorite.objects.create(**fav_kwargs)
-            messages.success(request, "Added to your favorites!")
-
-        # 3. Redirect back to the page they were on
-        return redirect(request.META.get('HTTP_REFERER', 'landing')) 
-
-class FavoriteListView(LoginRequiredMixin, ListView):
-    template_name = 'boutique/favorites.html'
-    context_object_name = 'favorites'
-
-    def get_queryset(self):
-        # Fetch only the favorites belonging to this specific user
-        return Favorite.objects.filter(user=self.request.user)
-    
-class MoveFavoriteToCartView(LoginRequiredMixin, View):
-    def post(self, request, favorite_id, *args, **kwargs):
-        # 1. Grab the specific favorite record (Ensure it belongs to this user!)
-        favorite = get_object_or_404(Favorite, id=favorite_id, user=request.user)
-        
-        # 2. Get or create the user's shopping cart
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        
-        # 3. Figure out which item was in the favorite to add to the cart
-        cart_item_kwargs = {'cart': cart}
-        if favorite.woman_item:
-            cart_item_kwargs['woman_item'] = favorite.woman_item
-        elif favorite.man_item:
-            cart_item_kwargs['man_item'] = favorite.man_item
-        elif favorite.kid_item:
-            cart_item_kwargs['kid_item'] = favorite.kid_item
-        elif favorite.accessory_item:
-            cart_item_kwargs['accessory_item'] = favorite.accessory_item
-            
-        # 4. Add it to the cart (or increase quantity if already there)
-        cart_item, item_created = CartItem.objects.get_or_create(**cart_item_kwargs)
-        if not item_created:
-            cart_item.quantity += 1
-            cart_item.save()
-            
-        # 5. Delete it from the Favorites list
-        item_name = favorite.item.description
-        favorite.delete()
-        
-        # 6. Show a nice message and refresh the favorites page
-        messages.success(request, f"Moved {item_name} to your cart!")
-        return redirect('favorites_list')
 
 # ── Customer Views (Only sees their own stuff) ─────────────────────────
 
@@ -432,6 +349,35 @@ class CustomerCartView(LoginRequiredMixin, ListView):
         # Pass the cart itself to the template so we can show the Total
         context['cart'], _ = Cart.objects.get_or_create(user=self.request.user)
         return context
+    
+class AddToCartView(LoginRequiredMixin, View):
+    def post(self, request, category, item_id, *args, **kwargs):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        cart_item_kwargs = {'cart': cart}
+        
+        if category == 'women':
+            cart_item_kwargs['woman_item_id'] = item_id
+        elif category == 'men':
+            cart_item_kwargs['man_item_id'] = item_id
+        elif category == 'kids':
+            cart_item_kwargs['kid_item_id'] = item_id
+        elif category == 'accessory':
+            cart_item_kwargs['accessory_item_id'] = item_id
+        else:
+            return HttpResponse("Invalid category", status=400)
+            
+        # Get the item if it's already in the cart, otherwise create it
+        cart_item, item_created = CartItem.objects.get_or_create(**cart_item_kwargs)
+        
+        if not item_created:
+            # If it was already in the cart, just increase the quantity
+            cart_item.quantity += 1
+            cart_item.save()
+            
+        messages.success(request, "Item added to your basket!")
+        # Redirect the user right back to the page they clicked the button on
+        return redirect(request.META.get('HTTP_REFERER', 'landing'))
     
 # Make sure you have this import at the top if you don't already:
 # from django.shortcuts import get_object_or_404, redirect
@@ -463,11 +409,80 @@ class RemoveCartItemView(LoginRequiredMixin, View):
         messages.info(request, "Item removed from your cart.")
         
         return redirect('customer_cart')
+    
+from django.views.generic import ListView
+
+class FavoriteListView(LoginRequiredMixin, ListView):
+    template_name = 'boutique/favorites.html'
+    context_object_name = 'favorites'
+
+    def get_queryset(self):
+        # Fetch only the favorites belonging to this specific user
+        return Favorite.objects.filter(user=self.request.user)
+    
+class ToggleFavoriteView(LoginRequiredMixin, View):
+    def post(self, request, category, item_id, *args, **kwargs):
+        fav_kwargs = {'user': request.user}
+
+        if category == 'women':
+            fav_kwargs['woman_item_id'] = item_id
+        elif category == 'men':
+            fav_kwargs['man_item_id'] = item_id
+        elif category == 'kids':
+            fav_kwargs['kid_item_id'] = item_id
+        elif category == 'accessory':
+            fav_kwargs['accessory_item_id'] = item_id
+        else:
+            return HttpResponse("Invalid category", status=400)
+
+        # Check if the user already favorited this item
+        existing_favorite = Favorite.objects.filter(**fav_kwargs).first()
+
+        if existing_favorite:
+            existing_favorite.delete()
+            messages.info(request, "Removed from your wishlist.")
+        else:
+            Favorite.objects.create(**fav_kwargs)
+            messages.success(request, "Added to your wishlist!")
+
+        return redirect(request.META.get('HTTP_REFERER', 'landing'))
+    
+class MoveFavoriteToCartView(LoginRequiredMixin, View):
+    def post(self, request, favorite_id, *args, **kwargs):
+        # 1. Grab the specific favorite record (Ensure it belongs to this user!)
+        favorite = get_object_or_404(Favorite, id=favorite_id, user=request.user)
+        
+        # 2. Get or create the user's shopping cart
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        # 3. Figure out which item was in the favorite to add to the cart
+        cart_item_kwargs = {'cart': cart}
+        if favorite.woman_item:
+            cart_item_kwargs['woman_item'] = favorite.woman_item
+        elif favorite.man_item:
+            cart_item_kwargs['man_item'] = favorite.man_item
+        elif favorite.kid_item:
+            cart_item_kwargs['kid_item'] = favorite.kid_item
+        elif favorite.accessory_item:
+            cart_item_kwargs['accessory_item'] = favorite.accessory_item
+            
+        # 4. Add it to the cart (or increase quantity if already there)
+        cart_item, item_created = CartItem.objects.get_or_create(**cart_item_kwargs)
+        if not item_created:
+            cart_item.quantity += 1
+            cart_item.save()
+            
+        # 5. Delete it from the Favorites list
+        item_name = favorite.item.description
+        favorite.delete()
+        
+        messages.success(request, f"Moved {item_name} to your basket!")
+        return redirect('favorites_list')
 
 # ── Admin Views (Sees everything) ──────────────────────────────────────
 
-class AdminCartListView(AdminRequiredMixin, ListView):
-    # AdminRequiredMixin ensures normal users get blocked!
+class AdminCartListView(LoginRequiredMixin, ListView):
+    # LoginRequiredMixin ensures normal users get blocked!
     model = Cart
     template_name = 'boutique/cart_admin.html'
     context_object_name = 'carts'

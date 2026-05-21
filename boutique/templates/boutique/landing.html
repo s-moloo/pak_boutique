@@ -2,104 +2,384 @@
 {% load static %}
 
 {% block content %}
-<div class="carousel w-full h-[600px] rounded-box shadow-2xl">
+<div class="carousel w-full h-[100vh] relative overflow-hidden group">
   
   <div id="slide1" class="carousel-item relative w-full">
-    <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=2000" class="w-full object-cover" />
-    
-    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10">
-      <a href="#slide4" class="btn btn-circle glass text-white">❮</a> 
-      <a href="#slide2" class="btn btn-circle glass text-white">❯</a>
+    <img src="media\images\Black_1-2_yR6ZXh5.jpg" class="w-full object-cover object-top" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Exclusive Launch</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">The Bridal Edit</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Hand-embroidered premium Lehengas tailored for your timeless moments.</p>
+      <div><a href="{% url 'women_list' %}" class="btn btn-primary px-8 shadow-lg">Explore Collection</a></div>
     </div>
-    
-    <div class="absolute bottom-10 left-10 bg-black/40 p-6 rounded-lg backdrop-blur-md text-white">
-      <h2 class="text-3xl font-serif">The Bridal Edit</h2>
-      <p>Hand-embroidered Lehengas for your big day.</p>
+    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <a href="#slide4" class="btn btn-circle glass text-white">❮</a> <a href="#slide2" class="btn btn-circle glass text-white">❯</a>
     </div>
   </div> 
 
   <div id="slide2" class="carousel-item relative w-full">
-    <img src="https://images.unsplash.com/photo-1583391733958-d25974641220?q=80&w=2000" class="w-full object-cover" />
-    
-    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10">
-      <a href="#slide1" class="btn btn-circle glass text-white">❮</a> 
-      <a href="#slide3" class="btn btn-circle glass text-white">❯</a>
+    {% if img_exists_check_placeholder %}
+      <img src="{% static 'images/ivory_sherwani.jpg' %}" alt="Ivory Sherwani" class="w-full object-cover object-top" />
+    {% else %}
+      <img src="media\images\ivory_sherwani.jpg" class="w-full object-cover object-top" />
+    {% endif %}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Heritage Craftsmanship</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Festive Menswear</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Classic structural Kurtas and Royal Sherwanis tailored to perfection.</p>
+      <div><a href="{% url 'men_list' %}" class="btn btn-primary px-8 shadow-lg">Shop Groomswear</a></div>
     </div>
-    
-    <div class="absolute bottom-10 left-10 bg-black/40 p-6 rounded-lg backdrop-blur-md text-white">
-      <h2 class="text-3xl font-serif">Festive Menswear</h2>
-      <p>Classic Kurtas and Sherwanis for every occasion.</p>
+    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <a href="#slide1" class="btn btn-circle glass text-white">❮</a> <a href="#slide3" class="btn btn-circle glass text-white">❯</a>
     </div>
   </div> 
 
   <div id="slide3" class="carousel-item relative w-full">
     <img src="https://images.unsplash.com/photo-1585465220689-1fc7b14d59a7?q=80&w=2000" class="w-full object-cover" />
-    
-    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10">
-      <a href="#slide2" class="btn btn-circle glass text-white">❮</a> 
-      <a href="#slide4" class="btn btn-circle glass text-white">❯</a>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Timeless Silks</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Elegant Sarees</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Exquisite drapes showcasing centuries of artisanal weaving legacy.</p>
+      <div><a href="{% url 'women_list' %}" class="btn btn-primary px-8 shadow-lg">View Banarasi & Silk</a></div>
     </div>
-    
-    <div class="absolute bottom-10 left-10 bg-black/40 p-6 rounded-lg backdrop-blur-md text-white">
-      <h2 class="text-3xl font-serif">Elegant Sarees</h2>
-      <p>Drape yourself in timeless tradition.</p>
+    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <a href="#slide2" class="btn btn-circle glass text-white">❮</a> <a href="#slide4" class="btn btn-circle glass text-white">❯</a>
     </div>
   </div> 
 
   <div id="slide4" class="carousel-item relative w-full">
     <img src="https://images.unsplash.com/photo-1605763240000-7e93b172d754?q=80&w=2000" class="w-full object-cover" />
-    
-    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10">
-      <a href="#slide3" class="btn btn-circle glass text-white">❮</a> 
-      <a href="#slide1" class="btn btn-circle glass text-white">❯</a>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Statement Accents</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Luxury Accessories</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Complete your formal transformation with curated traditional jewelry.</p>
+      <div><a href="{% url 'accessory_list' %}" class="btn btn-primary px-8 shadow-lg">Accessorize Now</a></div>
     </div>
-    
-    <div class="absolute bottom-10 left-10 bg-black/40 p-6 rounded-lg backdrop-blur-md text-white">
-      <h2 class="text-3xl font-serif">Luxury Accessories</h2>
-      <p>The perfect finishing touch to your outfit.</p>
+    <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <a href="#slide3" class="btn btn-circle glass text-white">❮</a> <a href="#slide1" class="btn btn-circle glass text-white">❯</a>
     </div>
   </div>
-
 </div>
 
+<div class="bg-base-200 rounded-2xl py-6 px-4 my-12 shadow-inner">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-2xl text-primary">✨</span>
+      <h3 class="text-xs md:text-sm font-serif font-bold tracking-wider uppercase">Premium Quality</h3>
+      <p class="text-xs text-base-content/60">Handpicked pure fabrics</p>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-2xl text-primary">🧵</span>
+      <h3 class="text-xs md:text-sm font-serif font-bold tracking-wider uppercase">Bespoke Stitching</h3>
+      <p class="text-xs text-base-content/60">Tailored to exact sizes</p>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-2xl text-primary">📦</span>
+      <h3 class="text-xs md:text-sm font-serif font-bold tracking-wider uppercase">Secure Shipping</h3>
+      <p class="text-xs text-base-content/60">Insured global handling</p>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-2xl text-primary">💖</span>
+      <h3 class="text-xs md:text-sm font-serif font-bold tracking-wider uppercase">Curated Luxury</h3>
+      <p class="text-xs text-base-content/60">Exclusive heritage edits</p>
+    </div>
+  </div>
+</div>
 
-<div class="container mx-auto px-4 py-12">
+<div class="w-full px-6 md:px-12 lg:px-24 py-12">
     
-    <section class="mb-16">
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 class="text-3xl font-bold font-serif text-primary">Women's Collection</h2>
-                <p class="text-base-content/70 mt-2">Elegant Shalwar Kameez, Sarees, and Lehengas</p>
+    <section class="mb-20">
+        <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
+            <div class="mb-4 md:mb-0">
+                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Trending Edits</span>
+                <h2 class="text-4xl font-bold font-serif text-base-content">Women's Lookbook</h2>
+                <p class="text-base-content/60 mt-1">Premium luxury wear, authentic detailing, and custom proportions.</p>
             </div>
-            <a href="{% url 'women_list' %}" class="btn btn-outline btn-primary btn-sm">View All</a>
+            <div>
+              <a href="{% url 'women_list' %}" class="btn btn-outline btn-primary px-6 btn-sm tracking-wider uppercase">View Entire Runway</a>
+            </div>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {% for item in women|slice:":4" %}
-            <div class="card bg-base-100 shadow-xl hover:-translate-y-1 transition-transform duration-300">
-                <figure class="px-4 pt-4 aspect-[3/4]">
-                    {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+            <div class="card bg-base-100 shadow-md border border-base-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
+                
+                <div class="absolute top-4 right-4 z-20">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'toggle_favorite' 'women' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </button>
+                        </form>
                     {% else %}
-                        <div class="bg-base-200 h-full w-full rounded-xl flex items-center justify-center text-base-content/50">No Image</div>
+                        <button type="button" onclick="auth_modal.showModal()" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </button>
                     {% endif %}
+                </div>
+
+                <figure class="px-3 pt-3 aspect-[3/4] relative overflow-hidden bg-base-200 rounded-t-2xl">
+                    <a href="{% url 'women_detail' item.pk %}" class="w-full h-full block group-hover:scale-[1.03] transition-transform duration-500">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+                        {% else %}
+                            <div class="h-full w-full flex items-center justify-center text-base-content/40 font-serif text-sm">Fine Apparel Image</div>
+                        {% endif %}
+                    </a>
                 </figure>
-                <div class="card-body items-center text-center p-4">
-                    <h2 class="card-title text-lg">{{ item.description|truncatechars:25 }}</h2>
-                    <p class="text-sm text-base-content/70 capitalize">{{ item.get_category_display }} | Size: {{ item.size }}</p>
-                    <p class="font-bold text-lg mt-2">${{ item.price }}</p>
-                    <div class="card-actions mt-4 w-full">
-                        <a href="{% url 'women_detail' item.pk %}" class="btn btn-primary btn-block btn-sm">View Details</a>
+
+                <div class="card-body p-5 flex flex-col justify-between">
+                    <div class="text-center">
+                        <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full mb-2 inline-block">
+                            {{ item.get_category_display }}
+                        </span>
+                        <h3 class="font-serif font-medium text-base-content text-lg line-clamp-1">
+                            <a href="{% url 'women_detail' item.pk %}" class="hover:text-primary transition-colors">{{ item.description }}</a>
+                        </h3>
+                        <div class="text-xs text-base-content/50 mt-0.5 font-medium">Palette: {{ item.color }} &bull; Fit: {{ item.size }}</div>
+                        <p class="font-serif text-xl font-bold text-primary mt-3">${{ item.price|floatformat:2 }}</p>
+                    </div>
+                    
+                    <div class="card-actions mt-4 w-full pt-2">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_to_cart' 'women' item.pk %}" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                            </form>
+                        {% else %}
+                            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p class="text-base-content/60 italic col-span-full">No women's clothing available at the moment.</p>
+            <div class="col-span-full alert alert-ghost border border-dashed border-base-300 py-12 flex flex-col items-center">
+                <p class="text-base-content/50 font-serif italic text-lg">Curating the winter collection...</p>
+            </div>
             {% endfor %}
         </div>
     </section>
 
-    <div class="divider"></div>
-    
-    </div>
+<section class="mb-20">
+        <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
+            <div class="mb-4 md:mb-0">
+                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Groom & Festive</span>
+                <h2 class="text-4xl font-bold font-serif text-base-content">Menswear Edit</h2>
+                <p class="text-base-content/60 mt-1">Premium luxury wear, authentic detailing, and custom proportions.</p>
+            </div>
+            <div>
+              <a href="{% url 'men_list' %}" class="btn btn-outline btn-primary px-6 btn-sm tracking-wider uppercase">View Entire Runway</a>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for item in men|slice:":4" %}
+            <div class="card bg-base-100 shadow-md border border-base-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
+                
+                <div class="absolute top-4 right-4 z-20">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'toggle_favorite' 'men' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </button>
+                        </form>
+                    {% else %}
+                        <button type="button" onclick="auth_modal.showModal()" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <figure class="px-3 pt-3 aspect-[3/4] relative overflow-hidden bg-base-200 rounded-t-2xl">
+                    <a href="{% url 'men_detail' item.pk %}" class="w-full h-full block group-hover:scale-[1.03] transition-transform duration-500">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+                        {% else %}
+                            <div class="h-full w-full flex items-center justify-center text-base-content/40 font-serif text-sm">Fine Apparel Image</div>
+                        {% endif %}
+                    </a>
+                </figure>
+
+                <div class="card-body p-5 flex flex-col justify-between">
+                    <div class="text-center">
+                        <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full mb-2 inline-block">
+                            {{ item.get_category_display }}
+                        </span>
+                        <h3 class="font-serif font-medium text-base-content text-lg line-clamp-1">
+                            <a href="{% url 'men_detail' item.pk %}" class="hover:text-primary transition-colors">{{ item.description }}</a>
+                        </h3>
+                        <div class="text-xs text-base-content/50 mt-0.5 font-medium">Palette: {{ item.color }} &bull; Fit: {{ item.size }}</div>
+                        <p class="font-serif text-xl font-bold text-primary mt-3">${{ item.price|floatformat:2 }}</p>
+                    </div>
+                    
+                    <div class="card-actions mt-4 w-full pt-2">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_to_cart' 'men' item.pk %}" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                            </form>
+                        {% else %}
+                            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full alert alert-ghost border border-dashed border-base-300 py-12 flex flex-col items-center">
+                <p class="text-base-content/50 font-serif italic text-lg">Curating the winter collection...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+<section class="mb-20">
+        <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
+            <div class="mb-4 md:mb-0">
+                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Little Royals</span>
+                <h2 class="text-4xl font-bold font-serif text-base-content">Kids Collections</h2>
+                <p class="text-base-content/60 mt-1">Premium luxury wear, authentic detailing, and custom proportions.</p>
+            </div>
+            <div>
+              <a href="{% url 'kids_list' %}" class="btn btn-outline btn-primary px-6 btn-sm tracking-wider uppercase">View Entire Runway</a>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for item in kids|slice:":4" %}
+            <div class="card bg-base-100 shadow-md border border-base-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
+                
+                <div class="absolute top-4 right-4 z-20">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'toggle_favorite' 'kids' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </button>
+                        </form>
+                    {% else %}
+                        <button type="button" onclick="auth_modal.showModal()" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <figure class="px-3 pt-3 aspect-[3/4] relative overflow-hidden bg-base-200 rounded-t-2xl">
+                    <a href="{% url 'kids_detail' item.pk %}" class="w-full h-full block group-hover:scale-[1.03] transition-transform duration-500">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+                        {% else %}
+                            <div class="h-full w-full flex items-center justify-center text-base-content/40 font-serif text-sm">Fine Apparel Image</div>
+                        {% endif %}
+                    </a>
+                </figure>
+
+                <div class="card-body p-5 flex flex-col justify-between">
+                    <div class="text-center">
+                        <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full mb-2 inline-block">
+                            {{ item.get_category_display }}
+                        </span>
+                        <h3 class="font-serif font-medium text-base-content text-lg line-clamp-1">
+                            <a href="{% url 'kids_detail' item.pk %}" class="hover:text-primary transition-colors">{{ item.description }}</a>
+                        </h3>
+                        <div class="text-xs text-base-content/50 mt-0.5 font-medium">Palette: {{ item.color }} &bull; Fit: {{ item.size }}</div>
+                        <p class="font-serif text-xl font-bold text-primary mt-3">${{ item.price|floatformat:2 }}</p>
+                    </div>
+                    
+                    <div class="card-actions mt-4 w-full pt-2">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_to_cart' 'kids' item.pk %}" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                            </form>
+                        {% else %}
+                            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full alert alert-ghost border border-dashed border-base-300 py-12 flex flex-col items-center">
+                <p class="text-base-content/50 font-serif italic text-lg">Curating the winter collection...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+<section class="mb-20">
+        <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
+            <div class="mb-4 md:mb-0">
+                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Fishing Touches</span>
+                <h2 class="text-4xl font-bold font-serif text-base-content">Fine Jewelry & Accessories</h2>
+                <p class="text-base-content/60 mt-1">Premium luxury wear, authentic detailing, and custom proportions.</p>
+            </div>
+            <div>
+              <a href="{% url 'accessory_list' %}" class="btn btn-outline btn-primary px-6 btn-sm tracking-wider uppercase">View Entire Runway</a>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for item in accessory|slice:":4" %}
+            <div class="card bg-base-100 shadow-md border border-base-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
+                
+                <div class="absolute top-4 right-4 z-20">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'toggle_favorite' 'accessory' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            </button>
+                        </form>
+                    {% else %}
+                        <button type="button" onclick="auth_modal.showModal()" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <figure class="px-3 pt-3 aspect-[3/4] relative overflow-hidden bg-base-200 rounded-t-2xl">
+                    <a href="{% url 'accessory_detail' item.pk %}" class="w-full h-full block group-hover:scale-[1.03] transition-transform duration-500">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.description }}" class="rounded-xl object-cover h-full w-full" />
+                        {% else %}
+                            <div class="h-full w-full flex items-center justify-center text-base-content/40 font-serif text-sm">Fine Apparel Image</div>
+                        {% endif %}
+                    </a>
+                </figure>
+
+                <div class="card-body p-5 flex flex-col justify-between">
+                    <div class="text-center">
+                        <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full mb-2 inline-block">
+                            {{ item.get_category_display }}
+                        </span>
+                        <h3 class="font-serif font-medium text-base-content text-lg line-clamp-1">
+                            <a href="{% url 'accessory_detail' item.pk %}" class="hover:text-primary transition-colors">{{ item.description }}</a>
+                        </h3>
+                        <div class="text-xs text-base-content/50 mt-0.5 font-medium">Palette: {{ item.color }} &bull; Fit: {{ item.size }}</div>
+                        <p class="font-serif text-xl font-bold text-primary mt-3">${{ item.price|floatformat:2 }}</p>
+                    </div>
+                    
+                    <div class="card-actions mt-4 w-full pt-2">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_to_cart' 'accessory' item.pk %}" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                            </form>
+                        {% else %}
+                            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full alert alert-ghost border border-dashed border-base-300 py-12 flex flex-col items-center">
+                <p class="text-base-content/50 font-serif italic text-lg">Curating the winter collection...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
 {% endblock %}

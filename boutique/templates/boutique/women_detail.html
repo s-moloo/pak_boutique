@@ -47,7 +47,7 @@
       <a href="{% url 'women_list' %}" class="btn btn-ghost">Back to List</a>
       
       <!-- Only show admin actions if logged in -->
-      {% if user.is_authenticated %}
+      {% if user.is_staff %}
         <a href="{% url 'women_update' woman.pk %}" class="btn btn-warning">Edit Item</a>
         <a href="{% url 'women_delete' woman.pk %}" class="btn btn-error">Delete</a>
       {% endif %}

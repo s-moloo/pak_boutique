@@ -12,7 +12,7 @@
         
       <!-- THE HEART BUTTON (Favorites) -->
       <!-- Positioned absolute to float over the top right of the image -->
-      <div class="absolute top-6 right-6 z-10">
+<div class="absolute top-6 right-6 z-10">
     {% if user.is_authenticated %}
         <form method="post" action="{% url 'toggle_favorite' 'women' item.pk %}">
             {% csrf_token %}
@@ -56,9 +56,9 @@
         {% if user.is_authenticated %}
             <!-- If logged in, a future POST form will go here to add to cart -->
             <form method="post" action="{% url 'add_to_cart' 'women' item.pk %}" class="w-full">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
-          </form>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+            </form>
         {% else %}
             <!-- If NOT logged in, trigger the DaisyUI Auth Modal -->
             <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary btn-block">Add to Cart</button>
