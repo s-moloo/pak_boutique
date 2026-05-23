@@ -1,49 +1,150 @@
 {% extends 'boutique/base.html' %}
-{% block title %}{{ man.description }}{% endblock %}
+{% block title %}{{ object.description }} | Sunaaz DesiWear{% endblock %}
 
 {% block content %}
-<div class="breadcrumbs text-sm mb-6">
-  <ul>
-    <li><a href="{% url 'landing' %}">Home</a></li>
-    <li><a href="{% url 'men_list' %}">Men</a></li>
-    <li class="text-base-content/70">{{ man.description|truncatechars:30 }}</li>
-  </ul>
-</div>
-
-<div class="card lg:card-side bg-base-200 shadow-xl max-w-5xl mx-auto">
-  <figure class="lg:w-1/2 aspect-[3/4] lg:aspect-auto bg-base-100">
-    {% if man.image %}
-      <img src="{{ man.image.url }}" alt="{{ man.description }}" class="object-cover w-full h-full" />
-    {% else %}
-      <div class="w-full h-96 flex items-center justify-center text-base-content/50 font-semibold">No Image Available</div>
-    {% endif %}
-  </figure>
+<div class="w-full max-w-[1400px] mx-auto px-4 md:px-8 py-8 mb-20">
   
-  <div class="card-body lg:w-1/2 justify-center p-8">
-    <div class="badge badge-primary mb-2">{{ man.get_category_display }}</div>
-    <h1 class="card-title text-4xl font-serif leading-tight mb-2">{{ man.description }}</h1>
-    <p class="text-3xl text-success font-bold mb-6">${{ man.price|floatformat:2 }}</p>
-    
-    <div class="flex flex-col gap-4 mb-6 text-lg">
-      <div class="flex items-center gap-3">
-        <span class="font-semibold text-base-content/70 w-16">Color:</span>
-        <span class="badge badge-ghost badge-lg">{{ man.color }}</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="font-semibold text-base-content/70 w-16">Size:</span>
-        <span class="badge badge-outline badge-lg">{{ man.size }}</span>
+  <div class="text-xs tracking-widest uppercase mb-8 text-base-content/60">
+    <a href="{% url 'landing' %}" class="hover:text-primary transition-colors">Home</a>
+    <span class="mx-2">/</span>
+    <a href="{% url 'men_list' %}" class="hover:text-primary transition-colors">Men</a>
+    <span class="mx-2">/</span>
+    <span class="text-base-content font-bold">{{ object.description|truncatechars:40 }}</span>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+
+    <div class="w-full lg:w-1/2">
+      <div class="sticky top-24 aspect-[3/4] bg-base-200 w-full overflow-hidden border border-base-200">
+        {% if object.image %}
+          <img src="{{ object.image.url }}" alt="{{ object.description }}" class="object-cover w-full h-full hover:scale-105 transition-transform duration-1000" />
+        {% else %}
+          <div class="w-full h-full flex items-center justify-center text-base-content/40 font-serif text-lg">No Image Available</div>
+        {% endif %}
       </div>
     </div>
 
-    <div class="divider"></div>
+    <div class="w-full lg:w-1/2 flex flex-col justify-start py-4">
+      
+      <div class="mb-4">
+        <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-1 rounded-sm">
+          {{ object.get_category_display }}
+        </span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl font-serif text-base-content leading-tight mb-4">{{ object.description }}</h1>
+      <p class="text-2xl font-serif text-base-content/80 mb-8">${{ object.price|floatformat:2 }}</p>
 
-    <div class="card-actions justify-end mt-4">
-      <a href="{% url 'men_list' %}" class="btn btn-ghost">Back to List</a>
-     {% if user.is_staff %}
-        <a href="{% url 'men_update' man.pk %}" class="btn btn-warning">Edit Item</a>
-        <a href="{% url 'men_delete' man.pk %}" class="btn btn-error">Delete</a>
+      <div class="flex items-center gap-3 mb-10 text-sm">
+        <span class="font-bold tracking-widest uppercase text-base-content/50 text-xs">Palette:</span>
+        <span class="font-medium text-base-content bg-base-200 px-3 py-1">{{ object.color }}</span>
+      </div>
+
+      <form method="post" action="{% url 'add_to_cart' 'men' object.pk %}" class="mb-12 w-full max-w-md">
+        {% csrf_token %}
+        
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-bold tracking-widest uppercase text-base-content/70">Select Fit</span>
+            <button type="button" onclick="size_modal.showModal()" class="text-xs text-primary underline underline-offset-4 hover:opacity-70 transition-opacity">Size Guide</button>
+          </div>
+          
+          <div class="flex flex-wrap gap-3">
+            {% for s in object.size_list %}
+              <div>
+                <input type="radio" id="size_{{ s }}" name="selected_size" value="{{ s }}" class="hidden peer" required />
+                <label for="size_{{ s }}" class="btn btn-outline border-base-300 peer-checked:btn-primary peer-checked:text-primary-content peer-checked:border-primary hover:border-primary transition-all rounded-none min-w-[3.5rem] h-12 flex items-center justify-center text-sm cursor-pointer">
+                  {{ s }}
+                </label>
+              </div>
+            {% empty %}
+               <span class="text-sm text-error italic">Sizing information currently unavailable.</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          {% if user.is_authenticated %}
+            <button type="submit" class="btn btn-primary flex-1 tracking-widest uppercase shadow-md rounded-none">Add to Basket</button>
+          {% else %}
+            <button type="button" onclick="auth_modal.showModal()" class="btn btn-primary flex-1 tracking-widest uppercase shadow-md rounded-none">Login to Add</button>
+          {% endif %}
+        </div>
+      </form>
+
+      {% if object.details %}
+      <div class="border-t border-base-200">
+        <div class="collapse collapse-plus rounded-none border-b border-base-200">
+          <input type="checkbox" checked /> 
+          <div class="collapse-title text-sm font-bold tracking-widest uppercase px-0">
+            Product Details & Care
+          </div>
+          <div class="collapse-content px-0 text-base-content/70 text-sm leading-loose">
+            {{ object.details|linebreaks }}
+          </div>
+        </div>
+      </div>
       {% endif %}
+      
+      <div class="{% if not object.details %}border-t border-base-200{% endif %}">
+        <div class="collapse collapse-plus rounded-none border-b border-base-200">
+          <input type="checkbox" /> 
+          <div class="collapse-title text-sm font-bold tracking-widest uppercase px-0">
+            Shipping & Returns
+          </div>
+          <div class="collapse-content px-0 text-base-content/70 text-sm leading-loose">
+            <p>Complimentary express shipping on all orders. Returns are accepted within 14 days of delivery for unworn items in perfect condition with tags attached.</p>
+          </div>
+        </div>
+      </div>
+
+      {% if user.is_staff %}
+      <div class="mt-16 p-6 bg-base-200 border border-base-300">
+        <h3 class="text-xs font-bold tracking-widest uppercase mb-4 text-base-content/70">Store Management Controls</h3>
+        <div class="flex gap-4">
+          <a href="{% url 'men_update' object.pk %}" class="btn btn-outline btn-sm rounded-none">Edit Item</a>
+          <form method="post" action="{% url 'men_delete' object.pk %}" onsubmit="return confirm('Are you sure you want to permanently delete this product?');">
+             {% csrf_token %}
+             <button type="submit" class="btn btn-outline btn-error btn-sm rounded-none">Delete Item</button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
     </div>
   </div>
 </div>
+
+<dialog id="size_modal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box bg-base-100 rounded-none sm:rounded-lg max-w-2xl p-0 overflow-hidden border border-base-200">
+    <div class="bg-base-200 p-6 border-b border-base-300 flex justify-between items-center">
+      <div>
+        <span class="text-[10px] tracking-widest uppercase text-primary font-bold">Sunaaz DesiWear</span>
+        <h3 class="font-serif text-2xl mt-1">Men's Size Guide</h3>
+      </div>
+      <form method="dialog"><button class="btn btn-sm btn-circle btn-ghost text-xl">✕</button></form>
+    </div>
+    <div class="p-6 overflow-x-auto">
+      <p class="text-sm text-base-content/70 mb-6 leading-relaxed">
+        Measurements are in inches. Our Sherwanis and Kurtas are tailored to traditional South Asian fits. If you are between sizes, we recommend sizing up.
+      </p>
+      <table class="table table-zebra w-full text-center">
+        <thead class="bg-base-200 text-base-content">
+          <tr class="uppercase tracking-widest text-xs"><th class="text-left">Size</th><th>Chest</th><th>Waist</th><th>Neck</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="font-bold text-left">S</td><td>36-38"</td><td>30-32"</td><td>14.5"</td></tr>
+          <tr><td class="font-bold text-left">M</td><td>38-40"</td><td>32-34"</td><td>15.5"</td></tr>
+          <tr><td class="font-bold text-left">L</td><td>40-42"</td><td>34-36"</td><td>16.5"</td></tr>
+          <tr><td class="font-bold text-left">XL</td><td>42-44"</td><td>36-38"</td><td>17.5"</td></tr>
+          <tr><td class="font-bold text-left text-primary">XXL</td><td colspan="3" class="italic text-base-content/60">Custom Bespoke Stitching (Contact Support)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-6 border-t border-base-200 bg-base-50 text-center">
+      <form method="dialog"><button class="btn btn-outline btn-primary px-8 tracking-widest uppercase shadow-sm">Close Guide</button></form>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button>close</button></form>
+</dialog>
 {% endblock %}

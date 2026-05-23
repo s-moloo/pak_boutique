@@ -5,7 +5,7 @@
 <div class="carousel w-full h-[100vh] relative overflow-hidden group">
   
   <div id="slide1" class="carousel-item relative w-full">
-    <img src="media\images\Black_1-2_yR6ZXh5.jpg" class="w-full object-cover object-top" />
+    <img src="media\images\Carousal1.png" class="w-full object-cover object-top" />
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
       <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Exclusive Launch</span>
       <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">The Bridal Edit</h1>
@@ -21,7 +21,7 @@
     {% if img_exists_check_placeholder %}
       <img src="{% static 'images/ivory_sherwani.jpg' %}" alt="Ivory Sherwani" class="w-full object-cover object-top" />
     {% else %}
-      <img src="media\images\ivory_sherwani.jpg" class="w-full object-cover object-top" />
+      <img src="media\images\Carousal2.png" class="w-full object-cover object-top" />
     {% endif %}
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
       <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Heritage Craftsmanship</span>
@@ -35,12 +35,12 @@
   </div> 
 
   <div id="slide3" class="carousel-item relative w-full">
-    <img src="https://images.unsplash.com/photo-1585465220689-1fc7b14d59a7?q=80&w=2000" class="w-full object-cover" />
+    <img src="media\images\Carousal3.png" class="w-full object-cover" />
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
-      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Timeless Silks</span>
-      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Elegant Sarees</h1>
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Beautiful Kids Lehengas</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Elegant Kids Lehengas</h1>
       <p class="text-white/80 text-lg max-w-md mb-6">Exquisite drapes showcasing centuries of artisanal weaving legacy.</p>
-      <div><a href="{% url 'women_list' %}" class="btn btn-primary px-8 shadow-lg">View Banarasi & Silk</a></div>
+      <div><a href="{% url 'kids_list' %}" class="btn btn-primary px-8 shadow-lg">View Collection</a></div>
     </div>
     <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <a href="#slide2" class="btn btn-circle glass text-white">❮</a> <a href="#slide4" class="btn btn-circle glass text-white">❯</a>
@@ -48,7 +48,7 @@
   </div> 
 
   <div id="slide4" class="carousel-item relative w-full">
-    <img src="https://images.unsplash.com/photo-1605763240000-7e93b172d754?q=80&w=2000" class="w-full object-cover" />
+    <img src="media\images\Carousal4.png" class="w-full object-cover" />
     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
       <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Statement Accents</span>
       <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Luxury Accessories</h1>
@@ -87,6 +87,21 @@
 </div>
 
 <div class="w-full px-6 md:px-12 lg:px-24 py-12">
+
+    <div class="w-full h-[calc(100vh-5rem)] relative overflow-hidden mb-16">
+        
+        <video autoplay loop muted playsinline class="w-full h-full object-cover object-center">
+            <source src="media\images\7685159-hd_1920_1080_30fps.mp4" type="video/mp4">
+            
+            </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Exclusive Launch</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">The Bridal Edit</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Hand-embroidered premium Lehengas tailored for your timeless moments.</p>
+      <div><a href="{% url 'women_list' %}" class="btn btn-primary px-8 shadow-lg">Explore Collection</a></div>
+    </div>
+       
+    </div>
     
     <section class="mb-20">
         <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
@@ -160,6 +175,21 @@
             {% endfor %}
         </div>
     </section>
+
+        <div class="w-full h-[calc(100vh-5rem)] relative overflow-hidden mb-16">
+        
+        <video autoplay loop muted playsinline class="w-full h-full object-cover object-center">
+            <source src="media\images\13305604_1920_1080_50fps.mp4" type="video/mp4">
+            
+            </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-12 md:p-20">
+      <span class="text-secondary font-bold tracking-widest text-sm uppercase mb-2">Menswear Edit</span>
+      <h1 class="text-4xl md:text-6xl font-serif text-white font-bold max-w-xl leading-tight mb-4">Groom & Festive</h1>
+      <p class="text-white/80 text-lg max-w-md mb-6">Hand-embroidered premium Lehengas tailored for your timeless moments.</p>
+      <div><a href="{% url 'men_list' %}" class="btn btn-primary px-8 shadow-lg">Explore Collection</a></div>
+    </div>
+       
+    </div>
 
 <section class="mb-20">
         <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
@@ -311,8 +341,8 @@
 <section class="mb-20">
         <div class="text-center md:text-left md:flex justify-between items-end mb-10 border-b border-base-200 pb-4">
             <div class="mb-4 md:mb-0">
-                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Fishing Touches</span>
-                <h2 class="text-4xl font-bold font-serif text-base-content">Fine Jewelry & Accessories</h2>
+                <span class="text-primary font-bold text-xs tracking-widest uppercase block mb-1">Elegant Jewelry</span>
+                <h2 class="text-4xl font-bold font-serif text-base-content">Exclusive Accessories</h2>
                 <p class="text-base-content/60 mt-1">Premium luxury wear, authentic detailing, and custom proportions.</p>
             </div>
             <div>
@@ -321,12 +351,12 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {% for item in accessory|slice:":4" %}
+            {% for item in accessories|slice:":4" %}
             <div class="card bg-base-100 shadow-md border border-base-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
                 
                 <div class="absolute top-4 right-4 z-20">
                     {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'toggle_favorite' 'accessory' item.pk %}">
+                        <form method="post" action="{% url 'toggle_favorite' 'accessories' item.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-circle btn-sm bg-base-100/90 hover:bg-error hover:text-white border-none shadow-md transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
@@ -363,7 +393,7 @@
                     
                     <div class="card-actions mt-4 w-full pt-2">
                         {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'add_to_cart' 'accessory' item.pk %}" class="w-full">
+                            <form method="post" action="{% url 'add_to_cart' 'accessories' item.pk %}" class="w-full">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary btn-block btn-sm tracking-wide uppercase shadow-md">Add to Basket</button>
                             </form>
@@ -382,4 +412,47 @@
     </section>
 
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // 1. Setup variables
+    const totalSlides = 4; // Change this if you add/remove slides
+    let currentSlide = 1;
+    let autoPlayInterval;
+    const carouselWrapper = document.querySelector('.carousel');
+
+    // 2. The upgraded function that ONLY scrolls horizontally
+    const moveToNextSlide = () => {
+      currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1;
+      const targetSlide = document.getElementById(`slide${currentSlide}`);
+      
+      if (targetSlide && carouselWrapper) {
+        // This targets the exact X-coordinate of the slide and scrolls to it,
+        // completely ignoring the Y-axis (vertical scroll) of the main page!
+        carouselWrapper.scrollTo({
+          left: targetSlide.offsetLeft,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // 3. Start the timer (5000 milliseconds = 5 seconds)
+    const startAutoPlay = () => {
+      autoPlayInterval = setInterval(moveToNextSlide, 5000); 
+    };
+
+    // 4. Stop the timer
+    const stopAutoPlay = () => {
+      clearInterval(autoPlayInterval);
+    };
+
+    // 5. Initialize timer and add Pause-on-Hover listeners
+    if (carouselWrapper) {
+      startAutoPlay();
+      carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+      carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+    }
+  });
+</script>
+
 {% endblock %}

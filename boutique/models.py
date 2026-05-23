@@ -12,7 +12,7 @@ class Women(models.Model):
 
     description  = models.CharField(max_length=60)
     color        = models.CharField(max_length=60)
-    size         = models.CharField(max_length=10)             # CharField
+    size = models.CharField(max_length=100, blank=True, null=True)             # CharField
     price        = models.DecimalField(                        # DecimalField
                        max_digits=10, decimal_places=2
                    )
@@ -21,10 +21,22 @@ class Women(models.Model):
                        choices=CATEGORY_CHOICES,
                        default='shalwarkameez',
                    )
+    
+    details = models.TextField(blank=True, null=True, 
+                        help_text="Enter material, design, pattern, and care instructions."
+                )
+    
     image        = models.ImageField(upload_to='images/')  # ImageField
 
     def __str__(self):
         return self.description
+    
+    @property
+    def size_list(self):
+        # Splits "S, M, L" into an actual Python list: ['S', 'M', 'L']
+        if self.size:
+            return [s.strip() for s in self.size.split(',') if s.strip()]
+        return []
     
 class Men(models.Model):
     CATEGORY_CHOICES = [
@@ -35,7 +47,7 @@ class Men(models.Model):
 
     description  = models.CharField(max_length=60)
     color        = models.CharField(max_length=60)
-    size         = models.CharField(max_length=10)             # CharField
+    size = models.CharField(max_length=100, blank=True, null=True)             # CharField
     price        = models.DecimalField(                        # DecimalField
                        max_digits=10, decimal_places=2
                    )
@@ -44,10 +56,21 @@ class Men(models.Model):
                        choices=CATEGORY_CHOICES,
                        default='kurta',
                    )
+    
+    details = models.TextField(blank=True, null=True, 
+                        help_text="Enter material, design, pattern, and care instructions."
+                )
     image        = models.ImageField(upload_to='images/')  # ImageField
 
     def __str__(self):
         return self.description
+    
+    @property
+    def size_list(self):
+        # Splits "S, M, L" into an actual Python list: ['S', 'M', 'L']
+        if self.size:
+            return [s.strip() for s in self.size.split(',') if s.strip()]
+        return []
     
 class Kids(models.Model):
     CATEGORY_CHOICES = [
@@ -58,7 +81,7 @@ class Kids(models.Model):
 
     description  = models.CharField(max_length=60)
     color        = models.CharField(max_length=60)
-    size         = models.CharField(max_length=10)             # CharField
+    size = models.CharField(max_length=100, blank=True, null=True)             # CharField
     price        = models.DecimalField(                        # DecimalField
                        max_digits=10, decimal_places=2
                    )
@@ -67,10 +90,20 @@ class Kids(models.Model):
                        choices=CATEGORY_CHOICES,
                        default='kidswear',
                    )
+    details = models.TextField(blank=True, null=True, 
+                        help_text="Enter material, design, pattern, and care instructions."
+                   )
     image        = models.ImageField(upload_to='images/')  # ImageField
 
     def __str__(self):
         return self.description
+    
+    @property
+    def size_list(self):
+        # Splits "S, M, L" into an actual Python list: ['S', 'M', 'L']
+        if self.size:
+            return [s.strip() for s in self.size.split(',') if s.strip()]
+        return []
     
 class Accessory(models.Model):
     CATEGORY_CHOICES = [
@@ -81,7 +114,7 @@ class Accessory(models.Model):
 
     description  = models.CharField(max_length=60)
     color        = models.CharField(max_length=60)
-    size         = models.CharField(max_length=10)             # CharField
+    size = models.CharField(max_length=100, blank=True, null=True)             # CharField
     price        = models.DecimalField(                        # DecimalField
                        max_digits=10, decimal_places=2
                    )
@@ -90,10 +123,20 @@ class Accessory(models.Model):
                        choices=CATEGORY_CHOICES,
                        default='jewelry',
                    )
+    details = models.TextField(blank=True, null=True, 
+                        help_text="Enter material, design, pattern, and care instructions."
+                   )
     image        = models.ImageField(upload_to='images/')  # ImageField
 
     def __str__(self):
         return self.description
+    
+    @property
+    def size_list(self):
+        # Splits "S, M, L" into an actual Python list: ['S', 'M', 'L']
+        if self.size:
+            return [s.strip() for s in self.size.split(',') if s.strip()]
+        return []
     
 
 # ── Cart Models ────────────────────────────────────────────────────────
@@ -115,7 +158,8 @@ class Cart(models.Model):
 # 2. CartItem uses the Cart defined above
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
-    
+    elected_size = models.CharField(max_length=50, blank=True, null=True)
+
     # Because we have 4 different product tables, we make a ForeignKey for each, 
     # but set them to null=True so only one is filled out at a time!
     woman_item = models.ForeignKey(Women, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,116 +1,165 @@
 {% extends 'boutique/base.html' %}
-{% block title %}Add New Item{% endblock %}
+{% block title %}{% if object %}Edit {{ object.description }}{% else %}Add New Item{% endif %}{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto mt-10 mb-20">
+<div class="w-full max-w-7xl mx-auto px-4 md:px-8 py-12">
   
-  <div class="mb-8 text-center">
-    <h1 class="text-4xl font-bold font-serif text-primary mb-2">
-      {% if object %}Edit Item{% else %}Add New Item{% endif %}
-    </h1>
-    <p class="text-base-content/60">Fill out the details below to update your inventory.</p>
+  <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4 border-b border-base-200 pb-6">
+    <div>
+      <h1 class="text-4xl font-bold font-serif text-base-content mb-2">
+        {% if object %}Edit Inventory Item{% else %}Add New Inventory{% endif %}
+      </h1>
+      <p class="text-base-content/60">Update product details, pricing, and imagery.</p>
+    </div>
+    <a href="javascript:history.back()" class="btn btn-outline btn-sm px-6 tracking-widest uppercase text-xs">❮ Back to List</a>
   </div>
 
-  <div class="card bg-base-100 shadow-2xl border border-base-200">
-    <div class="card-body p-8">
-      
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {% if form.non_field_errors %}
-          <div class="alert alert-error mb-6 shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>{{ form.non_field_errors }}</span>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    
+    <div class="lg:col-span-4 sticky top-24">
+      <div class="card bg-base-100 shadow-xl border border-base-200 overflow-hidden">
+        
+        {% if object %}
+          <figure class="aspect-[3/4] relative bg-base-200">
+            {% if object.image %}
+              <img src="{{ object.image.url }}" alt="{{ object.description }}" class="object-cover h-full w-full" />
+            {% else %}
+              <div class="h-full w-full flex items-center justify-center text-base-content/40 font-serif">No Image Available</div>
+            {% endif %}
+          </figure>
+          
+          <div class="card-body p-6">
+            <span class="text-[10px] tracking-widest uppercase text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full inline-block w-max mb-2">
+              Current Details
+            </span>
+            <h2 class="font-serif text-xl font-bold leading-snug">{{ object.description }}</h2>
+            
+            <div class="divider my-2"></div>
+            
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between items-center"><span class="text-base-content/50 uppercase tracking-wider text-xs font-bold">Category</span> <span class="font-medium">{{ object.get_category_display }}</span></div>
+              <div class="flex justify-between items-center"><span class="text-base-content/50 uppercase tracking-wider text-xs font-bold">Color</span> <span class="font-medium">{{ object.color }}</span></div>
+              <div class="flex justify-between items-center border-t border-base-200 pt-2 mt-2"><span class="text-base-content/50 uppercase tracking-wider text-xs font-bold">Price</span> <span class="font-serif font-bold text-primary text-lg">${{ object.price|floatformat:2 }}</span></div>
+            </div>
+          </div>
+        {% else %}
+          <div class="aspect-[3/4] flex flex-col items-center justify-center bg-base-200 p-8 text-center text-base-content/40 border-b border-base-200">
+            <span class="text-4xl mb-2">📸</span>
+            <p class="font-serif text-lg">New Item Preview</p>
+          </div>
+          <div class="card-body p-6 text-center text-sm text-base-content/60">
+            Fill out the form to establish the new product details.
           </div>
         {% endif %}
+      </div>
+    </div>
 
-        <div class="form-control w-full mb-4">
-          <label class="label font-semibold" for="{{ form.description.id_for_label }}">
-            <span class="label-text">Product Description</span>
-          </label>
-          <input type="text" name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" 
-                 value="{{ form.description.value|default:'' }}" 
-                 placeholder="e.g., Hand-embroidered Red Saree" 
-                 class="input input-bordered input-primary w-full focus:outline-none focus:ring-2 focus:ring-primary/50" required>
-          <div class="label"><span class="label-text-alt text-error">{{ form.description.errors }}</span></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-          <div class="form-control w-full">
-            <label class="label font-semibold" for="{{ form.category.id_for_label }}">
-              <span class="label-text">Category</span>
-            </label>
-            <select name="{{ form.category.html_name }}" id="{{ form.category.id_for_label }}" 
-                    class="select select-bordered select-primary w-full focus:outline-none focus:ring-2 focus:ring-primary/50" required>
-              {% for value, label in form.fields.category.choices %}
-                <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>{{ label }}</option>
-              {% endfor %}
-            </select>
-            <div class="label"><span class="label-text-alt text-error">{{ form.category.errors }}</span></div>
-          </div>
-
-          <div class="form-control w-full">
-            <label class="label font-semibold" for="{{ form.color.id_for_label }}">
-              <span class="label-text">Color</span>
-            </label>
-            <input type="text" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}" 
-                   value="{{ form.color.value|default:'' }}" 
-                   placeholder="e.g., Crimson Red" 
-                   class="input input-bordered input-primary w-full focus:outline-none focus:ring-2 focus:ring-primary/50" required>
-            <div class="label"><span class="label-text-alt text-error">{{ form.color.errors }}</span></div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-          <div class="form-control w-full">
-            <label class="label font-semibold" for="{{ form.size.id_for_label }}">
-              <span class="label-text">Size</span>
-            </label>
-            <input type="text" name="{{ form.size.html_name }}" id="{{ form.size.id_for_label }}" 
-                   value="{{ form.size.value|default:'' }}" 
-                   placeholder="e.g., M, L, XL" 
-                   class="input input-bordered input-primary w-full focus:outline-none focus:ring-2 focus:ring-primary/50" required>
-            <div class="label"><span class="label-text-alt text-error">{{ form.size.errors }}</span></div>
-          </div>
-
-          <div class="form-control w-full">
-            <label class="label font-semibold" for="{{ form.price.id_for_label }}">
-              <span class="label-text">Price ($)</span>
-            </label>
-            <label class="input input-bordered input-primary flex items-center gap-2 focus-within:ring-2 focus-within:ring-primary/50">
-              <span class="text-base-content/50 font-bold">$</span>
-              <input type="number" step="0.01" name="{{ form.price.html_name }}" id="{{ form.price.id_for_label }}" 
-                     value="{{ form.price.value|default:'' }}" 
-                     placeholder="0.00" class="grow" required>
-            </label>
-            <div class="label"><span class="label-text-alt text-error">{{ form.price.errors }}</span></div>
-          </div>
-        </div>
-
-        <div class="form-control w-full mb-8">
-          <label class="label font-semibold" for="{{ form.image.id_for_label }}">
-            <span class="label-text">Product Image</span>
-          </label>
+    <div class="lg:col-span-8">
+      <div class="card bg-base-100 shadow-md border border-base-200">
+        <div class="card-body p-8 md:p-10">
           
-          <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" 
-                 class="file-input file-input-bordered file-input-primary w-full" accept="image/*" {% if not object %}required{% endif %}>
-          
-          {% if object and object.image %}
-            <div class="label">
-              <span class="label-text-alt text-base-content/60">Current: <a href="{{ object.image.url }}" target="_blank" class="link link-primary">{{ object.image.name }}</a></span>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-error mb-6">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-control w-full mb-6">
+              <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.description.id_for_label }}">
+                <span class="label-text text-base-content/70">Product Title / Description</span>
+              </label>
+              <input type="text" name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" 
+                     value="{{ form.description.value|default:'' }}" 
+                     class="input input-bordered input-primary w-full bg-base-50" required>
+              <div class="label"><span class="label-text-alt text-error">{{ form.description.errors }}</span></div>
             </div>
-          {% endif %}
-          <div class="label"><span class="label-text-alt text-error">{{ form.image.errors }}</span></div>
-        </div>
 
-        <div class="flex items-center justify-end gap-4 border-t border-base-200 pt-6">
-          <a href="javascript:history.back()" class="btn btn-ghost">Cancel</a>
-          <button type="submit" class="btn btn-primary px-8">
-            {% if object %}Save Changes{% else %}Add to Inventory{% endif %}
-          </button>
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="form-control w-full">
+                <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.category.id_for_label }}">
+                  <span class="label-text text-base-content/70">Category</span>
+                </label>
+                <select name="{{ form.category.html_name }}" id="{{ form.category.id_for_label }}" class="select select-bordered select-primary w-full bg-base-50" required>
+                  {% for value, label in form.fields.category.choices %}
+                    <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </select>
+                <div class="label"><span class="label-text-alt text-error">{{ form.category.errors }}</span></div>
+              </div>
 
-      </form>
+              <div class="form-control w-full">
+                <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.color.id_for_label }}">
+                  <span class="label-text text-base-content/70">Color Palette</span>
+                </label>
+                <input type="text" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}" 
+                       value="{{ form.color.value|default:'' }}" class="input input-bordered input-primary w-full bg-base-50" required>
+                <div class="label"><span class="label-text-alt text-error">{{ form.color.errors }}</span></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="form-control w-full">
+                <label class="label font-bold uppercase tracking-widest text-xs">
+                  <span class="label-text text-base-content/70">Available Sizes</span>
+                </label>
+                
+                <div class="flex flex-wrap gap-4 mt-2 bg-base-50 p-3 border border-base-200 rounded-lg">
+                  {% for checkbox in form.size %}
+                    <label class="cursor-pointer flex items-center gap-2 hover:opacity-80">
+                      {{ checkbox.tag }}
+                      <span class="label-text font-medium">{{ checkbox.choice_label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+                <div class="label"><span class="label-text-alt text-error">{{ form.size.errors }}</span></div>
+              </div>
+
+              <div class="form-control w-full">
+                <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.price.id_for_label }}">
+                  <span class="label-text text-base-content/70">Price (CAD)</span>
+                </label>
+                <label class="input input-bordered input-primary bg-base-50 flex items-center gap-2">
+                  <span class="text-base-content/50 font-bold">$</span>
+                  <input type="number" step="0.01" name="{{ form.price.html_name }}" id="{{ form.price.id_for_label }}" 
+                         value="{{ form.price.value|default:'' }}" class="grow" required>
+                </label>
+                <div class="label"><span class="label-text-alt text-error">{{ form.price.errors }}</span></div>
+              </div>
+            </div>
+
+            <div class="form-control w-full mb-6">
+              <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.details.id_for_label }}">
+                <span class="label-text text-base-content/70">Fabric, Pattern & Design Details</span>
+              </label>
+              <textarea name="{{ form.details.html_name }}" id="{{ form.details.id_for_label }}" 
+                        class="textarea textarea-bordered textarea-primary w-full h-32 bg-base-50 leading-relaxed">{% if form.details.value %}{{ form.details.value }}{% endif %}</textarea>
+              <div class="label"><span class="label-text-alt text-error">{{ form.details.errors }}</span></div>
+            </div>
+
+            <div class="form-control w-full mb-10">
+              <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.image.id_for_label }}">
+                <span class="label-text text-base-content/70">Upload Product Image</span>
+              </label>
+              <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" 
+                     class="file-input file-input-bordered file-input-primary w-full bg-base-50" accept="image/*" {% if not object %}required{% endif %}>
+              {% if object and object.image %}
+                <div class="label mt-1">
+                  <span class="label-text-alt text-base-content/60">Current File: <a href="{{ object.image.url }}" target="_blank" class="link link-primary font-medium">{{ object.image.name }}</a></span>
+                </div>
+              {% endif %}
+              <div class="label"><span class="label-text-alt text-error">{{ form.image.errors }}</span></div>
+            </div>
+
+            <div class="flex items-center justify-end gap-4 border-t border-base-200 pt-6">
+              <button type="submit" class="btn btn-primary px-10 tracking-widest uppercase shadow-md">
+                {% if object %}Save Changes{% else %}Publish Item{% endif %}
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

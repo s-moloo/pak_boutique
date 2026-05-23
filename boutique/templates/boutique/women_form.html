@@ -61,17 +61,22 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-          <div class="form-control w-full">
-            <label class="label font-semibold" for="{{ form.size.id_for_label }}">
-              <span class="label-text">Size</span>
-            </label>
-            <input type="text" name="{{ form.size.html_name }}" id="{{ form.size.id_for_label }}" 
-                   value="{{ form.size.value|default:'' }}" 
-                   placeholder="e.g., M, L, XL" 
-                   class="input input-bordered input-primary w-full focus:outline-none focus:ring-2 focus:ring-primary/50" required>
-            <div class="label"><span class="label-text-alt text-error">{{ form.size.errors }}</span></div>
-          </div>
+        <<div class="form-control w-full">
+  <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.size.id_for_label }}">
+    <span class="label-text text-base-content/70">Available Sizes</span>
+  </label>
+  
+  <div class="flex flex-wrap gap-4 mt-2 bg-base-50 p-3 border border-base-200 rounded-lg">
+    {% for checkbox in form.size %}
+      <label class="cursor-pointer flex items-center gap-2 hover:opacity-80 transition-opacity">
+        {{ checkbox.tag }}
+        <span class="label-text font-medium">{{ checkbox.choice_label }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  
+  <div class="label"><span class="label-text-alt text-error">{{ form.size.errors }}</span></div>
+</div>
 
           <div class="form-control w-full">
             <label class="label font-semibold" for="{{ form.price.id_for_label }}">
@@ -86,6 +91,18 @@
             <div class="label"><span class="label-text-alt text-error">{{ form.price.errors }}</span></div>
           </div>
         </div>
+
+        <div class="form-control w-full mb-6">
+  <label class="label font-bold uppercase tracking-widest text-xs" for="{{ form.details.id_for_label }}">
+    <span class="label-text text-base-content/70">Fabric, Pattern & Design Details</span>
+  </label>
+  
+  <textarea name="{{ form.details.html_name }}" id="{{ form.details.id_for_label }}" 
+            class="textarea textarea-bordered textarea-primary w-full h-32 bg-base-50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary leading-relaxed" 
+            placeholder="e.g., Crafted from pure raw silk, this piece features intricate hand-embroidered Zari work along the borders. Dry clean only.">{% if form.details.value %}{{ form.details.value }}{% endif %}</textarea>
+            
+  <div class="label"><span class="label-text-alt text-error">{{ form.details.errors }}</span></div>
+</div>
 
         <div class="form-control w-full mb-8">
           <label class="label font-semibold" for="{{ form.image.id_for_label }}">

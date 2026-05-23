@@ -112,7 +112,6 @@ class WomenInlineDeleteView(LoginRequiredMixin, DeleteView):
         messages.error(request, f'{name} has been deleted.')
         return HttpResponse('')      # HTMX swaps this (empty) into the row
 
-
 # ── Men ──────────────────────────────────────────────────────────────────
 class MenListView(ListView):
     model = Men
@@ -296,40 +295,36 @@ class AccessoryInlineDeleteView(LoginRequiredMixin, DeleteView):
 
 class AddToCartView(LoginRequiredMixin, View):
     def post(self, request, category, item_id, *args, **kwargs):
-        # 1. Get the current user's cart (or create one if it's their first time)
         cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        # 1. CATCH THE SIZE FROM THE HTML FORM
+        chosen_size = request.POST.get('selected_size')
 
-        # 2. Figure out which item they are trying to add based on the URL
+        # ADD THIS LINE RIGHT HERE:
+        print(f"DEBUG: The user tried to add size -> {chosen_size}")
+        
         cart_item_kwargs = {'cart': cart}
-
+        
+        # 2. Add the chosen size to the kwargs so the database saves it
+        if chosen_size:
+            cart_item_kwargs['selected_size'] = chosen_size
+            
         if category == 'women':
-            item = get_object_or_404(Women, pk=item_id)
-            cart_item_kwargs['woman_item'] = item
+            cart_item_kwargs['woman_item_id'] = item_id
         elif category == 'men':
-            item = get_object_or_404(Men, pk=item_id)
-            cart_item_kwargs['man_item'] = item
-        elif category == 'kids':
-            item = get_object_or_404(Kids, pk=item_id)
-            cart_item_kwargs['kid_item'] = item
-        elif category == 'accessory':
-            item = get_object_or_404(Accessory, pk=item_id)
-            cart_item_kwargs['accessory_item'] = item
-        else:
-            messages.error(request, "Invalid category.")
-            return redirect(request.META.get('HTTP_REFERER', 'landing'))
-
-        # 3. Check if this exact item is ALREADY in their cart
-        cart_item, created = CartItem.objects.get_or_create(**cart_item_kwargs)
-
-        if not created:
-            # If it was already in the cart, just increase the quantity!
+            cart_item_kwargs['man_item_id'] = item_id
+        # ... (keep your existing kids and accessory logic here) ...
+            
+        # 3. Use get_or_create. 
+        # By including selected_size, if a user buys a Medium Saree and a Large Saree, 
+        # they will show up as TWO separate items in the cart!
+        cart_item, item_created = CartItem.objects.get_or_create(**cart_item_kwargs)
+        
+        if not item_created:
             cart_item.quantity += 1
             cart_item.save()
-
-        # 4. Show a success toast message
-        messages.success(request, f"Added {item.description} to your cart!")
-
-        # 5. Redirect the user right back to the page they clicked the button on!
+            
+        messages.success(request, f"Added to your basket in size {chosen_size}!")
         return redirect(request.META.get('HTTP_REFERER', 'landing'))
 
 # ── Customer Views (Only sees their own stuff) ─────────────────────────
